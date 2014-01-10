@@ -1,9 +1,21 @@
 # Just Player
 
 ## Overview
-Just Player is a very simple wrapper for Cocoa AVPlayer. It wrapps complicated usage of AVPlayer. For those who want to use AVPlayer in a super easy way, and tweek in his later need.
+Just Player is a very simple wrapper for Cocoa AVPlayer. It wrapps complicated usage of AVPlayer. For those who want to use AVPlayer in a super easy way, and tweek in her/his later need.
 
 ## Steps of Usage
+
+Assume we declare a 'player' property of type JustPlayer* in our view controller like this:
+
+``` objective-c
+
+	#import "JustPlayer.h"
+	#import "JustPlayerLayerView.h"
+
+	@interface ViewController ()
+	@property (nonatomic, strong) JustPlayer *player;
+	@end
+```	
 
 ### allocate
 
@@ -59,7 +71,7 @@ notifies us.
 
 ### setup display
 
-Use storyboard to add a UIView UI object, set it to JustPlayerLayerView class, and make it as an outlet of
+Use storyboard to add a UIView UI object, set it as JustPlayerLayerView class, and make it as an outlet of
 your view controller, say :
 
 ``` objective-c
@@ -73,6 +85,10 @@ Set the outlet view as the 'display' of JustPlayer:
 ``` objective-c
 	[self.playerLayer setPlayer: self.player.player];
 ```
+
+### note
+
+For complete demo please reference the SamplePlayer project.
 
 ## License
 JustPlayer is available under the MIT license. See the LICENSE file for more info.
