@@ -88,7 +88,9 @@ Set the outlet view as the 'display' of JustPlayer:
 
 ### note
 
-For complete demo please reference the SamplePlayer project.
+* For complete demo please reference the SamplePlayer project.
+* If you want to add Exception Breakpoint, please change its type from 'All' to 'Objective-C', such that the C++ exception throwed by the Audio related framwork can be passed. 
+[http://stackoverflow.com/questions/9683547/avaudioplayer-throws-breakpoint-in-debug-mode](http://stackoverflow.com/questions/9683547/avaudioplayer-throws-breakpoint-in-debug-mode)
 
 ## License
 JustPlayer is available under the MIT license. See the LICENSE file for more info.
