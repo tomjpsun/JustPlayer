@@ -174,14 +174,18 @@ static void *PlayerItemTimeRangesObservationContext = &PlayerItemTimeRangesObser
             NSArray* times = thePlayerItem.loadedTimeRanges;
 
             // there is only ever one NSValue in the array
-            NSValue* value = [times objectAtIndex:0];
+            // could get empty array for the first time,
+            // happened for some remote sites
 
-            CMTimeRange range;
-            [value getValue:&range];
-            float start = CMTimeGetSeconds(range.start);
-            float duration = CMTimeGetSeconds(range.duration);
+            if (times != nil && times.count > 0) {
+                NSValue* value = [times objectAtIndex:0];
+                CMTimeRange range;
+                [value getValue:&range];
+                float start = CMTimeGetSeconds(range.start);
+                float duration = CMTimeGetSeconds(range.duration);
 
-            self.blkPlayerItemLoadTimeRange(start, duration);
+                self.blkPlayerItemLoadTimeRange(start, duration);
+            }
         }
         return;
     }
