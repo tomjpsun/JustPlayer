@@ -59,9 +59,6 @@ static void *PlayerItemTimeRangesObservationContext = &PlayerItemTimeRangesObser
                          options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                          context:PlayerItemTimeRangesObservationContext];
 
-    if (self.player.currentItem != self.playerItem) {
-        [self.player replaceCurrentItemWithPlayerItem: self.playerItem];
-    }
     self.player = [AVPlayer playerWithPlayerItem: self.playerItem];
 
 }
