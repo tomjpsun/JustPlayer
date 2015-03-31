@@ -7,13 +7,31 @@
 //
 
 #import "AppDelegate.h"
+#import <AVFoundation/AVFoundation.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    [self setupBackgroundSession];
     return YES;
+}
+
+- (void)setupBackgroundSession
+{
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    NSError *setCategoryError = nil;
+    
+    BOOL success = [audioSession setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
+    if (!success) {
+        NSLog(@"%@", [setCategoryError localizedDescription]);
+    }
+    NSError *activationError = nil;
+    success = [audioSession setActive:YES error:&activationError];
+    if (!success) {
+        NSLog(@"%@", [setCategoryError localizedDescription]);
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

@@ -16,8 +16,8 @@
 
 @implementation ViewController
 
-#define kSampleURL @"http://devimages.apple.com/samplecode/adDemo/ad.m3u8"
-
+//#define kSampleURL @"http://devimages.apple.com/samplecode/adDemo/ad.m3u8"
+#define kSampleURL @"http://file.crdo.in/prt%2F%E4%B8%8D%E5%8F%AA%E6%98%AF%E5%B4%91%E6%9B%B2%2Faudio%2FKUN-20150329.mp3"
 - (void)viewDidLoad
 {
     [super viewDidLoad];
