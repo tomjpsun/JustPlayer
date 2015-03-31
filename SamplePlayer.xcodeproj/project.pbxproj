@@ -176,6 +176,7 @@
 				E2664848186849A6006CE7D9 /* Sources */,
 				E2664849186849A6006CE7D9 /* Frameworks */,
 				E266484A186849A6006CE7D9 /* Resources */,
+				E2A504DF1ACB166C0013BBF5 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -265,6 +266,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		E2A504DF1ACB166C0013BBF5 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "find -E . -not \\( -name .svn -prune -o -name .git -prune -o -name Pods -prune \\) -regex '.*\\.(h|m|mm|swift)' -print0 | xargs -0 sed -i -E \"s/[[:space:]]*$//\"";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E2664848186849A6006CE7D9 /* Sources */ = {

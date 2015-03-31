@@ -46,12 +46,22 @@ static void *PlayerItemTimeRangesObservationContext = &PlayerItemTimeRangesObser
 - (void)prepareForURL:(NSURL*)url
 {
     self.assetURL = url;
-    
+
     [self cleanPreviousResources];
     self.playerItem = [AVPlayerItem playerItemWithURL: url];
 
-    [self.playerItem addObserver: self forKeyPath: @"status" options: NSKeyValueObservingOptionNew context: &PlayerItemStatusContext];
-    [self.playerItem addObserver:self forKeyPath:@"loadedTimeRanges" options: NSKeyValueObservingOptionNew context:PlayerItemTimeRangesObservationContext];
+    [self.playerItem addObserver:self
+                      forKeyPath:@"status"
+                         options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
+                         context:&PlayerItemStatusContext];
+    [self.playerItem addObserver:self
+                      forKeyPath:@"loadedTimeRanges"
+                         options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
+                         context:PlayerItemTimeRangesObservationContext];
+
+    if (self.player.currentItem != self.playerItem) {
+        [self.player replaceCurrentItemWithPlayerItem: self.playerItem];
+    }
     self.player = [AVPlayer playerWithPlayerItem: self.playerItem];
 
 }
@@ -153,20 +163,34 @@ static void *PlayerItemTimeRangesObservationContext = &PlayerItemTimeRangesObser
 
     if (context == &PlayerItemStatusContext) {
 
-        // debug printing
-        if (AVPlayerItemStatusReadyToPlay == self.playerItem.status) {
-            NSLog(@"status ready");
-        }
-        else if (AVPlayerItemStatusFailed == self.playerItem.status) {
-            NSLog(@"status failed: %@", self.playerItem.error);
-        }
-        else NSLog(@"status unknown");
+        AVPlayerItemStatus status = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
+        switch (status)
+        {
+                /* Indicates that the status of the player is not yet known because
+                 it has not tried to load new media resources for playback */
+            case AVPlayerItemStatusUnknown: {
+                NSLog(@"status unknown");
+            }
+                break;
 
-        // invoke the block provided by the UI module
-        if (self.blkPlayerItemReady) {
-            AVPlayerItem *thePlayerItem = (AVPlayerItem*)object;
-            self.blkPlayerItemReady(thePlayerItem.status);
+            case AVPlayerItemStatusReadyToPlay: {
+                NSLog(@"status ready");
+                // invoke the block provided by the UI module
+
+                if (self.blkPlayerItemReady) {
+                    AVPlayerItem *thePlayerItem = (AVPlayerItem*)object;
+                    self.blkPlayerItemReady(thePlayerItem.status);
+                }
+            }
+                break;
+
+            case AVPlayerItemStatusFailed: {
+                NSLog(@"status failed: %@", self.playerItem.error);
+            }
+                break;
+
         }
+
         return;
 
     }

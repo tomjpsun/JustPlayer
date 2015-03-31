@@ -17,7 +17,8 @@
 @implementation ViewController
 
 //#define kSampleURL @"http://devimages.apple.com/samplecode/adDemo/ad.m3u8"
-#define kSampleURL @"http://file.crdo.in/prt%2F%E4%B8%8D%E5%8F%AA%E6%98%AF%E5%B4%91%E6%9B%B2%2Faudio%2FKUN-20150329.mp3"
+#define kSampleURL @"http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8"
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -35,7 +36,7 @@
         }
         else {
 
-            NSLog(@"player item status is %ld", status);
+           // NSLog(@"player item status is %d", status);
 
         }
     };
@@ -43,7 +44,7 @@
 
     self.player.blkPlayerItemLoadTimeRange = ^(float start, float duration) {
 
-        NSLog(@"get range (%.1f, %.1f)", start, duration);
+        //NSLog(@"get range (%.1f, %.1f)", start, duration);
 
     };
 
@@ -63,7 +64,7 @@
 
 - (IBAction)buttonPressed:(UIButton *)sender {
     BOOL playing = self.player.isPlaying;
-    
+
     if (playing) {
         [self.player pause];
         [sender setTitle:@"play" forState:UIControlStateNormal];

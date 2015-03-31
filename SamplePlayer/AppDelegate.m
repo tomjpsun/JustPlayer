@@ -22,7 +22,7 @@
 {
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     NSError *setCategoryError = nil;
-    
+
     BOOL success = [audioSession setCategory:AVAudioSessionCategoryPlayback error:&setCategoryError];
     if (!success) {
         NSLog(@"%@", [setCategoryError localizedDescription]);
