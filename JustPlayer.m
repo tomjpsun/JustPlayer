@@ -23,34 +23,36 @@ static void *PlayerItemTimeRangesObservationContext = &PlayerItemTimeRangesObser
 @implementation JustPlayer
 
 
-@synthesize assetURL, playerItem, player, timeObserver;
-
 - (CMTime)currentTime
 {
-    return player.currentTime;
+    return self.player.currentTime;
 }
 
 - (AVPlayerItem*)currentItem
 {
-    return player.currentItem;
+    return self.player.currentItem;
 }
 
 - (void)cleanPreviousResources
 {
-    [player.currentItem removeObserver: self forKeyPath: @"status"];
-    [player.currentItem removeObserver: self forKeyPath: @"loadedTimeRanges"];
-    [self removeScrubberTimer];
+    if (self.playerItem) {
+        [self.playerItem removeObserver: self forKeyPath: @"status"];
+        [self.playerItem removeObserver: self forKeyPath: @"loadedTimeRanges"];
+        [self removeScrubberTimer];
+        self.playerItem = nil;
+    }
 }
 
 - (void)prepareForURL:(NSURL*)url
 {
-    assetURL = url;
+    self.assetURL = url;
+    
     [self cleanPreviousResources];
-    playerItem = [AVPlayerItem playerItemWithURL: url];
+    self.playerItem = [AVPlayerItem playerItemWithURL: url];
 
-    [playerItem addObserver: self forKeyPath: @"status" options: NSKeyValueObservingOptionNew context: &PlayerItemStatusContext];
-    [playerItem addObserver:self forKeyPath:@"loadedTimeRanges" options: NSKeyValueObservingOptionNew context:PlayerItemTimeRangesObservationContext];
-    player = [AVPlayer playerWithPlayerItem: playerItem];
+    [self.playerItem addObserver: self forKeyPath: @"status" options: NSKeyValueObservingOptionNew context: &PlayerItemStatusContext];
+    [self.playerItem addObserver:self forKeyPath:@"loadedTimeRanges" options: NSKeyValueObservingOptionNew context:PlayerItemTimeRangesObservationContext];
+    self.player = [AVPlayer playerWithPlayerItem: self.playerItem];
 
 }
 
@@ -75,34 +77,34 @@ static void *PlayerItemTimeRangesObservationContext = &PlayerItemTimeRangesObser
 
 - (void)pause
 {
-    [player pause];
+    [self.player pause];
 }
 
 - (BOOL)isPlaying
 {
-    return ([player rate] != 0.0);
+    return ([self.player rate] != 0.0);
 }
 
 - (void)play
 {
-    [player play];
+    [self.player play];
 
 }
 
 - (void)playerSeekto:(float)position
 {
-    playerItem = player.currentItem;
+    self.playerItem = self.player.currentItem;
     float totalTime = CMTimeGetSeconds( [self playerItemDuration] );
     CMTime scrubToTime = CMTimeMakeWithSeconds(totalTime * position, NSEC_PER_SEC);
 
-    [playerItem seekToTime: scrubToTime];
+    [self.playerItem seekToTime: scrubToTime];
 }
 
 
 
 - (CMTime)playerItemDuration
 {
-	AVPlayerItem *thePlayerItem = [player currentItem];
+	AVPlayerItem *thePlayerItem = [self.player currentItem];
 	if (thePlayerItem.status == AVPlayerItemStatusReadyToPlay)
 	{
 		return([thePlayerItem duration]);
@@ -125,7 +127,7 @@ static void *PlayerItemTimeRangesObservationContext = &PlayerItemTimeRangesObser
     JustPlayer *this = self;
 
 	/* Update the scrubber during normal playback. */
-	timeObserver = [player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(interval, NSEC_PER_SEC)
+	self.timeObserver = [self.player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(interval, NSEC_PER_SEC)
                            queue:NULL
                            usingBlock:
                     ^(CMTime time)
@@ -138,10 +140,10 @@ static void *PlayerItemTimeRangesObservationContext = &PlayerItemTimeRangesObser
 
 -(void)removeScrubberTimer
 {
-	if (timeObserver)
+	if (self.timeObserver)
 	{
-		[player removeTimeObserver:timeObserver];
-		timeObserver = nil;
+		[self.player removeTimeObserver:self.timeObserver];
+		self.timeObserver = nil;
 	}
 }
 

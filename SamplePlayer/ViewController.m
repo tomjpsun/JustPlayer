@@ -61,4 +61,16 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)buttonPressed:(UIButton *)sender {
+    BOOL playing = self.player.isPlaying;
+    
+    if (playing) {
+        [self.player pause];
+        [sender setTitle:@"play" forState:UIControlStateNormal];
+    }
+    else {
+        [self.player play];
+        [sender setTitle:@"pause" forState:UIControlStateNormal];
+    }
+}
 @end
