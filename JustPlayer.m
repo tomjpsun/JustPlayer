@@ -100,7 +100,20 @@ static void *PlayerItemTimeRangesObservationContext = &PlayerItemTimeRangesObser
 
 - (void)playerSeekto:(float)position
 {
-    self.playerItem = self.player.currentItem;
+    if (self.playerItem != self.player.currentItem) {
+        [self.playerItem removeObserver: self forKeyPath: @"status"];
+        [self.playerItem removeObserver: self forKeyPath: @"loadedTimeRanges"];
+        self.playerItem = self.player.currentItem;
+        [self.playerItem addObserver:self
+                          forKeyPath:@"status"
+                             options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
+                             context:&PlayerItemStatusContext];
+        [self.playerItem addObserver:self
+                          forKeyPath:@"loadedTimeRanges"
+                             options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
+                             context:PlayerItemTimeRangesObservationContext];
+    }
+
     float totalTime = CMTimeGetSeconds( [self playerItemDuration] );
     CMTime scrubToTime = CMTimeMakeWithSeconds(totalTime * position, NSEC_PER_SEC);
 
