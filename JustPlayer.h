@@ -15,12 +15,14 @@
 typedef void (^BlkSyncScrubber)(CMTime time);
 typedef void (^BlkPlayerItemReady)(AVPlayerItemStatus status);
 typedef void (^BlkPlayerItemLoadTimeRange)(float start, float duration);
+typedef void (^BlkPlayerBufferEmpty)();
 
 @interface JustPlayer : NSObject
 
 @property (nonatomic, copy) BlkSyncScrubber blkSyncScrubber;
 @property (nonatomic, copy) BlkPlayerItemReady blkPlayerItemReady;
 @property (nonatomic, copy) BlkPlayerItemLoadTimeRange blkPlayerItemLoadTimeRange;
+@property (nonatomic, copy) BlkPlayerBufferEmpty blkPlayerBufferEmpty;
 @property (nonatomic, strong) AVPlayerItem *playerItem;
 @property (nonatomic, strong) AVPlayer *player;
 
