@@ -43,11 +43,11 @@
 
 
     self.player.blkPlayerItemLoadTimeRange = ^(float start, float duration) {
-        //NSLog(@"get range (%.1f, %.1f)", start, duration);
+        NSLog(@"get range (%.1f, %.1f)", start, duration);
     };
 
     self.player.blkPlayerBufferEmpty = ^() {
-        [weak.player pause];
+        NSLog(@"player buffer empty");
     };
 
     [self.player prepareForURL: url];

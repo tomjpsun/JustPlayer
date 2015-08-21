@@ -242,6 +242,7 @@ static void *PlaybackBufferEmptyContext = &PlaybackBufferEmptyContext;
         if (self.blkPlayerBufferEmpty) {
             self.blkPlayerBufferEmpty();
         }
+        return;
     }
 
     [super observeValueForKeyPath:keyPath ofObject:object
