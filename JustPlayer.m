@@ -9,20 +9,16 @@
 #import "JustPlayer.h"
 #import <Bolts.h>
 
-static void *PlayerItemStatusContext = &PlayerItemStatusContext;
-static void *PlayerItemTimeRangesObservationContext = &PlayerItemTimeRangesObservationContext;
+static void *StatusContext = &StatusContext;
+static void *TimeRangesContext = &TimeRangesContext;
 static void *PlaybackBufferEmptyContext = &PlaybackBufferEmptyContext;
 
 @interface JustPlayer()
-
 @property (nonatomic, strong) NSURL *assetURL;
-
 @property (nonatomic, strong) id timeObserver;
 @end
 
-
 @implementation JustPlayer
-
 
 - (CMTime)currentTime
 {
@@ -55,12 +51,12 @@ static void *PlaybackBufferEmptyContext = &PlaybackBufferEmptyContext;
     [self.playerItem addObserver:self
                       forKeyPath:@"status"
                          options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
-                         context:&PlayerItemStatusContext];
+                         context:&StatusContext];
 
     [self.playerItem addObserver:self
                       forKeyPath:@"loadedTimeRanges"
                          options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
-                         context:PlayerItemTimeRangesObservationContext];
+                         context:TimeRangesContext];
 
     [self.playerItem addObserver:self
                       forKeyPath:@"playbackBufferEmpty"
@@ -115,11 +111,11 @@ static void *PlaybackBufferEmptyContext = &PlaybackBufferEmptyContext;
         [self.playerItem addObserver:self
                           forKeyPath:@"status"
                              options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
-                             context:&PlayerItemStatusContext];
+                             context:&StatusContext];
         [self.playerItem addObserver:self
                           forKeyPath:@"loadedTimeRanges"
                              options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
-                             context:PlayerItemTimeRangesObservationContext];
+                             context:TimeRangesContext];
         [self.playerItem addObserver:self
                           forKeyPath:@"playbackBufferEmpty"
                              options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
@@ -183,7 +179,7 @@ static void *PlaybackBufferEmptyContext = &PlaybackBufferEmptyContext;
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
                         change:(NSDictionary *)change context:(void *)context {
 
-    if (context == PlayerItemStatusContext) {
+    if (context == StatusContext) {
 
         AVPlayerItemStatus status = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
         switch (status)
@@ -216,7 +212,7 @@ static void *PlaybackBufferEmptyContext = &PlaybackBufferEmptyContext;
         return;
 
     }
-    else if (context == PlayerItemTimeRangesObservationContext) {
+    else if (context == TimeRangesContext) {
         if (self.blkPlayerItemLoadTimeRange) {
             AVPlayerItem* thePlayerItem = (AVPlayerItem*)object;
             NSArray* times = thePlayerItem.loadedTimeRanges;
